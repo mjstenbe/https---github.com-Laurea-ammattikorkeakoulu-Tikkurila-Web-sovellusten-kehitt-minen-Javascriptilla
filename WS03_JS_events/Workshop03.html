@@ -71,32 +71,94 @@
         innerHTML-kentän avulla.
     </ul>
     <hr />
-    <h2>Harjoitus 3</h2>
-    <p>Alla näet yksinkertaisen lomakkeen.</p>
-    <ul>
-        <li>Lisää onfocus-tapahtuma textarea-alueeseen. Kun käyttäjä siirtyy kenttään, näytetään teksti: "Please fill in
-            the form with proper data." Voit myös kokeilla taustavärin muuttamista.</li>
-        <li>Lisää onkeydown-tapahtuma `textarea`-elementtiin. Lisää sitten koodi joka laskee näppäinpainallukset ja
-            tulostaa ne tekstikenttään jonka id on "charcount". Voisitko keksiä muita fiksuja käyttötapoja
-            tämänkaltaiselle kuuntelijalle?</li>
-        <li>Kun lomakkeen painiketta klikataan, tarkista onko `textarea`-kenttä tyhjä. Ilmoita käyttäjälle tyhjästä
-            kentästä asianmukaisella viestillä haluamallasi tavalla. </li>
-        <li> VINKKI: Voit käyttää seuraavaa komentoa
-            tekstialueen arvon lukemiseen: <i>document.getElementById("textdata").value</i>. Lomakkeita käsitellään
-            tarkemmin työpajoissa 4 ja 5.</li>
 
-        <li> Bonus: Näytä käyttäjälle reaaliaikainen merkkimäärä textarea-kentässä (esim. 0/200).
-            Jos käyttäjä ylittää merkkirajan, muuta tekstin väri punaiseksi.</li>
+<h2>Harjoitus 3</h2>
+<p>Tässä harjoituksessa rakennat yksinkertaisen "pikapalaute"-lomakkeen, jossa harjoittelet DOM‑käsittelyä ja erilaisia tapahtumankuuntelijoita.</p>
 
-        <li>>Haaste: Lisää "lähetä"-painikkeeseen deaktivointi, kun kenttä on tyhjä tai liian pitkä. Tämä onnistuu
-            muuttamalla napin disabled-kenttää JavaScriptin avulla.
-        </li>
-    </ul>
-    <form>
-        <textarea id="textdata"></textarea><br>
-        <span id="charcount"></span>
-        <button>Lähetä</button>
-    </form>
+<ul>
+    <li>
+        Lisää <strong>focus</strong>-tapahtuma <code>textarea</code>-elementtiin.  
+        Kun kenttä saa fokuksen, näytä elementissä <code>#status</code> teksti:  
+        <em>"Kirjoita selkeä palaute. Käytä asiallista kieltä."</em>  
+        Voit myös halutessasi muuttaa tekstialueen taustaväriä.
+    </li>
+
+    <li>
+        Lisää <strong>blur</strong>-tapahtuma.  
+        Kun käyttäjä siirtyy pois kentästä, tyhjennä status‑teksti ja palauta alkuperäinen taustaväri.
+    </li>
+
+    <li>
+        Lisää <strong>input</strong>-tapahtuma <code>textarea</code>-kenttään.  
+        Jokaisella näppäimellä:
+        <ul>
+            <li>päivitä merkkimäärä elementtiin <code>#charcount</code> muodossa <strong>X/200</strong></li>
+            <li>muuta tekstin väri punaiseksi, jos käyttäjä ylittää 200 merkkiä</li>
+            <li>päivitä reaaliaikainen esikatselu elementtiin <code>#preview</code></li>
+            <li>estä "Lähetä"-painikkeen käyttö, jos merkkejä on < 10 tai > 200</li>
+        </ul>
+    </li>
+
+    <li>
+        Lisää <strong>keydown</strong>-tapahtuma.  
+        Jos käyttäjä painaa <strong>Ctrl + Enter</strong> (Windows) tai <strong>Cmd + Enter</strong> (Mac),
+        yritä lähettää lomake ohjelmallisesti (kutsu esimerkiksi <code>form.requestSubmit()</code>).
+    </li>
+
+    <li>
+        Lisää <strong>submit</strong>-tapahtumankuuntelija lomakkeeseen.  
+        Sen tulee:
+        <ul>
+            <li>kutsua <code>event.preventDefault()</code></li>
+            <li>tarkistaa, että palaute on 10–200 merkkiä pitkä</li>
+            <li>näyttää virheilmoituksen <code>#status</code>-elementissä</li>
+            <li>onnistuneessa lähetyksessä näyttää viestin <em>"Kiitos palautteesta!"</em>, tyhjentää tekstialueen ja nollata laskurin ja esikatselun</li>
+        </ul>
+    </li>
+
+    <li>
+        <strong>Lähetä-painikkeen deaktivointi:</strong>  
+        Napin tulee olla <code>disabled</code>, kun:
+        <ul>
+            <li>kenttä on tyhjä</li>
+            <li>merkkejä on alle 10</li>
+            <li>merkkejä on yli 200</li>
+        </ul>
+    </li>
+
+    <li>
+        <strong>Bonus:</strong>
+        <ul>
+            <li>Näytä edistymispalkki (merkkimäärä → leveys suhteessa 200)</li>
+            <li>Kopioi esikatselun sisältö leikepöydälle napista</li>
+            <li>Tallenna käyttäjän kirjoittama palaute <code>localStorage</code>en</li>
+        </ul>
+    </li>
+</ul>
+
+<hr>
+
+<p>Käytä seuraavaa lomakepohjaa:</p>
+<code>
+<form id="feedbackForm" novalidate>
+  <label for="feedback">Palaute (min 10 merkkiä, max 200):</label><br>
+  <textarea id="feedback" placeholder="Kirjoita palaute..." rows="5"></textarea><br>
+
+  <div style="margin: 4px 0;">
+    <span id="charcount">0/200</span>
+    <span id="status" aria-live="polite" style="margin-left: 8px; color: #666;"></span>
+  </div>
+
+  <button id="sendBtn" type="submit" disabled>Lähetä</button>
+</form>
+</code>
+<hr>
+
+<h3>Esikatselu</h3>
+<div id="preview" style="border: 1px solid #ccc; padding: 8px; min-height: 40px; background: #fafafa;">
+  (Esikatselu tulee tähän)
+</div>
+    
     <hr />
     <h2>Harjoitus 4</h2>
     <div id="coordinates">Lorem ipsum</div>
